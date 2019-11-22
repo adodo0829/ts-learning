@@ -47,6 +47,10 @@ let anyType1
 anyType1 = true
 console.log(anyType, anyType1)
 
+let uk: unknown;
+// unknown 和 any 的主要区别是 unknown 类型会更加严格:在对unknown类型的值执行大多数操作之前,我们必须进行某种形式的检查,而在对 any 类型的值执行操作之前,我们不必进行任何检查。
+// 当 unknown 类型被确定是某个类型之前,它不能被进行任何操作比如实例化、getter、函数执行等等
+
 // 7.数组
 let arr1: (number | string)[] = [1, 2, 3, '2121']
 let arr2: Array<number | boolean> = [2, 2, 2, true]
