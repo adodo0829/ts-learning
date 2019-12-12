@@ -13,11 +13,11 @@
 
 ### 常用类型
 基础篇就快速过一下...
-- string
+- string	
   let s: string = 'i am string'
-- number
+- number	
   let n: number = 1
-- boolean
+- boolean	
   let b: boolean = true
 - null & undefined
   // undefined 类型的变量只能被赋值为 undefined
