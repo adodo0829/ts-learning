@@ -14,27 +14,39 @@
 ### 常用类型
 基础篇就快速过一下...
 - string	
+```
   let s: string = 'i am string'
-- number	
+```
+- number
+```
   let n: number = 1
-- boolean	
+```
+- boolean
+```
   let b: boolean = true
+```
 - null & undefined
-  // undefined 类型的变量只能被赋值为 undefined
+```
+ // undefined 类型的变量只能被赋值为 undefined
   // null 类型的变量只能被赋值为 null
   // 赋值为其他类型会报错
   let ud: undefined = undefined
   let nu: null = null
+```
 - void 空值
+```
   // 没有返回值的函数为void
   // 声明一个 void 类型的只能将它赋值为 undefined 和 null
   const popup = (): void => {
     console.log('function no return')
   }
   let useless: void = undefined
+```
 - any 任意类型, 实在没招了就用这个吧
+```
   // 可以被任何值赋值, 声明未指定类型的变量也为 any
   let anyType: any = 'str'
+```
 - unkonwn
   let uk: unknown;
   // unknown 和 any 的主要区别是 unknown 类型会更加严格:在对unknown类型的值执行大多数操作之前,我们必须进行某种形式的检查,而在对 any 类型的值执行操作之前,我们不必进行任何检查。
