@@ -145,7 +145,9 @@ const up = Direction.Up
 console.log(up)
 ```
 ### 接口 interface
+接口（Interfaces）用于对「对象的形状（Shape）」进行描述
 接口通常用来约束我们定义的对象, 函数, 类的结构和类型
+
 - 对象约束
 ```
 // 赋值的时候，变量的形状必须和接口的形状保持一致(不能多也不能少,类型还必须一致)
@@ -167,7 +169,28 @@ let addSum1: Func
 addSum1 = (a, b) => a + b
 ```
 - 类约束
+// 接口只能约束类的公有成员 public
+// 接口不能约束类的构造函数
 
+- 接口继承
+// 接口继承接口
+interface Alarm {
+    alert();
+}
+interface LightableAlarm extends Alarm {
+    lightOn();
+    lightOff();
+}
+// 接口继承类
+class Point {
+    x: number;
+    y: number;
+}
+interface Point3d extends Point {
+    z: number;
+}
+
+let point3d: Point3d = {x: 1, y: 2, z: 3};
 ### 函数类型
 - 函数类型定义:
 ```
@@ -233,6 +256,7 @@ class Car {
   static seats: string = '座位'
 }
 let bz = new Car('benz') // 通过 new 来实例化
+let bm: Car = new Car('bm') // 类的类型
 console.log(Car.seats)
 ```
 - 类继承
@@ -246,8 +270,37 @@ class Bmw extends Car {
 }
 console.log(Bmw.seats)
 ```
+- 类实现接口
+不同类之间可以有一些共有的特性，这时候就可以把特性提取成接口（interfaces），用 implements 关键字来实现
+// 类必须实现接口中声明的所有属性;可以定义接口未声明的属性
+// 接口只能约束类的公有成员 public
+// 接口不能约束类的构造函数
+interface Alarm {
+    alert();
+}
 
-## 实践篇
+interface Light {
+    lightOn();
+    lightOff();
+}
+
+class Car implements Alarm, Light {
+    alert() {
+        console.log('Car alert');
+    }
+    lightOn() {
+        console.log('Car light on');
+    }
+    lightOff() {
+        console.log('Car light off');
+    }
+}
+
+### 泛型
+泛型：在定义函数、接口或类的时候，不预先指定具体的类型，而在使用的时候再指定类型的一种特性。
+
+
+## 工程实践篇
 
 
 ## 一些注意事项(踩坑)
