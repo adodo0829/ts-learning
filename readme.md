@@ -271,6 +271,7 @@ class Bmw extends Car {
 console.log(Bmw.seats)
 ```
 - 类实现接口
+```
 不同类之间可以有一些共有的特性，这时候就可以把特性提取成接口（interfaces），用 implements 关键字来实现
 // 类必须实现接口中声明的所有属性;可以定义接口未声明的属性
 // 接口只能约束类的公有成员 public
@@ -295,10 +296,29 @@ class Car implements Alarm, Light {
         console.log('Car light off');
     }
 }
-
+```
 ### 泛型
 泛型：在定义函数、接口或类的时候，不预先指定具体的类型，而在使用的时候再指定类型的一种特性。
 
+## 理论进阶篇
+### ts类型检查机制
+- 类型推断
+根据tsconfig.json的配置规则进行推断, 上下文推断,类型断言as
+- 类型兼容
+不同变量相互赋值时的类型检查
+函数兼容: 参数个数, 参数类型, 返回值类型
+接口兼容: 成员少可以被赋值为成员多的
+- 类型保护
+在特殊区块使用确定的类型属性和方法
+```
+1.instanceof
+if (c instanceof A) c.a 
+2.in
+if (c in C) c.a
+3.typeof
+函数的参数为联合类型
+if (typeof arg === 'string') {} else {}
+4.声明类型保护方法
 
 ## 工程实践篇
 
