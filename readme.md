@@ -246,8 +246,54 @@ class Bmw extends Car {
 }
 console.log(Bmw.seats)
 ```
+- 抽象类 abstract
+抽象类无法实例化, 一般作为基类使用, 我们可以抽离其他类的公共属性和方法
+写入抽象类中
+```
+abstract class Animal {
+  // abstract 关键字是用于定义抽象类和在抽象类内部定义抽象方法
+  abstract say(): void;
+  move(): void {
+    console.log('i can move')
+  }
+}
+
+class Dog extends Animal {
+  // 声明抽象类中的方法, 这里子类可以对父类方法进行重写; 实现所谓的多态
+  say() {
+    console.log('汪汪汪');
+  }
+}
+
+let dog1 = new Dog()
+dog1.say() // 汪汪汪
+dog1.move() // i can move
+```
 
 ## 实践篇
+这里是针对我们在正式开发中使用 ts 的一些技巧及规范说明
+
+### tsconfig.json
+// ts项目配置文件说明
+https://segmentfault.com/a/1190000013514680
+http://www.typescriptlang.org/docs/handbook/compiler-options.html
+
+### 声明文件 xxx.d.ts
+```
+declare var 声明全局变量
+declare function 声明全局方法
+declare class 声明全局类
+declare enum 声明全局枚举类型
+declare namespace 声明（含有子属性的）全局对象
+interface 和 type 声明全局类型
+export 导出变量
+export namespace 导出（含有子属性的）对象
+export default ES6 默认导出
+export = commonjs 导出模块
+export as namespace UMD 库声明全局变量
+declare global 扩展全局变量
+declare module 扩展模块
+```
 
 
 ## 一些注意事项(踩坑)

@@ -8,17 +8,17 @@ abstract class Animal {
     console.log('i can move')
   }
 }
-// 无法实例化
+
 class Dog extends Animal {
-  // 声明抽象类中的方法
+  // 声明抽象类中的方法, 这里子类可以对父类方法进行重写; 实现所谓的多态
   say() {
     console.log('汪汪汪');
   }
 }
 
 let dog1 = new Dog()
-dog1.say()
-dog1.move()
+dog1.say() // 汪汪汪
+dog1.move() // i can move
 
 //  类访问限制标志: public, private, protected
 class Car {
