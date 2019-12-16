@@ -10,4 +10,7 @@
 // let g = 'global var'
 // console.log(1, g);
 // import './libs/7.class-extends'
-import './libs/8.generics'
+// import './libs/8.generics'
+import './libs/9.union-insert-index'
+import './libs/10.mapping'
+import './libs/11.condition'

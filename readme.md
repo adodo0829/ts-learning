@@ -57,7 +57,7 @@
 ```
   let arr1: (number | string)[] = [1, 2, 3, '2121']
   let arr2: Array<number | boolean> = [2, 2, 2, true]
-````
+```
 - 元组
 ```
   // 表示一个已知元素数量和类型的数组，各元素的类型不必相同;越界不能访问
@@ -96,9 +96,11 @@
   let compute: (x:number, y:number) => number   // 定义函数类型
   compute = (aaa, bbb) => aaa + bbb
 ```
+
 ### 枚举类型 enum
 枚举: 我们可以理解为一组常量的集合, 可以帮助我们解决一些硬编码问题
 特别是 if 语句中的判断值
+
 - 数字枚举
 ```
 export enum EState {
@@ -293,31 +295,6 @@ let dog1 = new Dog()
 dog1.say() // 汪汪汪
 dog1.move() // i can move
 ```
-
-## 实践篇
-这里是针对我们在正式开发中使用 ts 的一些技巧及规范说明
-
-### tsconfig.json
-// ts项目配置文件说明
-https://segmentfault.com/a/1190000013514680
-http://www.typescriptlang.org/docs/handbook/compiler-options.html
-
-### 声明文件 xxx.d.ts
-```
-declare var 声明全局变量
-declare function 声明全局方法
-declare class 声明全局类
-declare enum 声明全局枚举类型
-declare namespace 声明（含有子属性的）全局对象
-interface 和 type 声明全局类型
-export 导出变量
-export namespace 导出（含有子属性的）对象
-export default ES6 默认导出
-export = commonjs 导出模块
-export as namespace UMD 库声明全局变量
-declare global 扩展全局变量
-declare module 扩展模块
-```
 - 类实现接口
 ```
 不同类之间可以有一些共有的特性，这时候就可以把特性提取成接口（interfaces），用 implements 关键字来实现
@@ -347,6 +324,65 @@ class Car implements Alarm, Light {
 ```
 ### 泛型
 泛型：在定义函数、接口或类的时候，不预先指定具体的类型，而在使用的时候再指定类型的一种特性。
+在声明的同时指定类型变量的类型值
+```
+// 1.函数约束
+// 类型T不需要预先指定 相当于any类型
+// 保证输入类型和返回值类型是一致的 弥补了any类型的缺点
+function log<T>(v: T): T {
+  return v;
+}
+let s: string = "generics";
+let a = log(s);
+console.log(a);
+console.log(log(1111));
+
+// 2.函数类型约束
+// 联合类型,类型别名与字符串字面量类型都是使用 type 进行定义。
+// type Log = <T>(v: T) => T // 类型别名
+interface Log {
+  <T>(v: T): T;
+}
+let myLog: Log = log;
+console.log(myLog([1, 2, 3]));
+
+// 3.泛型接口
+// 接口的所有属性都可以受到泛型变量的约束
+// 可以传入默认类型
+interface IGeneric<T = string> {
+  (v: T): T;
+}
+let IG1: IGeneric<number> = log;
+console.log(IG1(123));
+
+// 4.泛型类
+class GenericNumber<T> {
+  // 泛型变量不能约束类的静态属性
+  // zeroValue: T = T;
+  add(x: T, y?: T) {
+    console.log(x);
+    return x;
+  }
+}
+
+let myGenericNumber = new GenericNumber<number>();
+myGenericNumber.add(1);
+let myG1 = new GenericNumber();
+myG1.add("hello ts generics");
+
+// 5.泛型约束
+interface Length {
+  length: number;
+}
+
+// T继承Length接口, 这样的话输入的参数必须具有length属性 获取value.length就是合法的了
+function ggg<T extends Length>(value: T): T {
+  console.log(value, value.length);
+  return value;
+}
+ggg('hello')
+ggg([1, 2, 3])
+```
 
 ## 理论进阶篇
 ### ts类型检查机制
@@ -367,9 +403,35 @@ if (c in C) c.a
 函数的参数为联合类型
 if (typeof arg === 'string') {} else {}
 4.声明类型保护方法
+```
+### 联合,交叉,索引类型
+
+
 
 ## 工程实践篇
+这里是针对我们在正式开发中使用 ts 的一些技巧及规范说明
 
+### tsconfig.json
+// ts项目配置文件说明
+https://segmentfault.com/a/1190000013514680
+http://www.typescriptlang.org/docs/handbook/compiler-options.html
+
+### 声明文件 xxx.d.ts
+```
+declare var 声明全局变量
+declare function 声明全局方法
+declare class 声明全局类
+declare enum 声明全局枚举类型
+declare namespace 声明（含有子属性的）全局对象
+interface 和 type 声明全局类型
+export 导出变量
+export namespace 导出（含有子属性的）对象
+export default ES6 默认导出
+export = commonjs 导出模块
+export as namespace UMD 库声明全局变量
+declare global 扩展全局变量
+declare module 扩展模块
+```
 
 ## 一些注意事项(踩坑)
 1. vue组件内的 script 不支持别名导入; 只能相对路径导入, 暂时没发现解决方法
