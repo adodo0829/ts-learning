@@ -3,10 +3,11 @@
 ## 前言介绍
 - typescript 的优点
   静态弱类型语言, 编译时就会报错, 降低bug,低级错误出现的可能性
-  自带代码提示,类型注解,易于协作,降低沟通成本
+  自带代码提示,类型注解
+  对于多人合作的项目比较友好,降低沟通成本
 
 - 为什么学习 ts
-  除了上面一些优点之外, ts 可以帮助我们锻炼数据类型思维(数据定义: 数据类型,结构), 提高我们编码的严谨性以及代码的健壮性;
+  除了上面一些优点之外, ts 可以帮助我们锻炼数据类型思维(数据定义: 数据类型&结构), 提高我们编码的严谨性以及代码的健壮性;
   本篇笔记就 ts 的理论基础和实践两个方面进行了一些总结
 
 ## 理论基础篇
@@ -27,7 +28,7 @@
 ```
 - null & undefined
 ```
- // undefined 类型的变量只能被赋值为 undefined
+  // undefined 类型的变量只能被赋值为 undefined
   // null 类型的变量只能被赋值为 null
   // 赋值为其他类型会报错
   let ud: undefined = undefined
@@ -50,7 +51,9 @@
 - unkonwn
 ```
   let uk: unknown;
-  // unknown 和 any 的主要区别是 unknown 类型会更加严格:在对unknown类型的值执行大多数操作之前,我们必须进行某种形式的检查,而在对 any 类型的值执行操作之前,我们不必进行任何检查。
+  // unknown 和 any 的主要区别是 unknown 类型会更加严格:
+  在对unknown类型的值执行大多数操作之前,我们必须进行某种形式的检查, 通常可以用as断言
+  而在对 any 类型的值执行操作之前,我们不必进行任何检查。
   // 当 unknown 类型被确定是某个类型之前,它不能被进行任何操作比如实例化
  ```
 - 数组array
@@ -60,15 +63,15 @@
 ```
 - 元组
 ```
-  // 表示一个已知元素数量和类型的数组，各元素的类型不必相同;越界不能访问
+  // 表示一个已知元素数量和类型的数组,各元素的类型不必相同;越界不能访问
+  // 在函数的剩余参数中定义参数的个数和类型
   let t1: [string, number, boolean | string]
   t1 = ['hello', 123, false]
 ```
 - never
 ```
   // 永不存在的值的类型
-  // never类型: 总是会抛出异常或根本就不会有返回值的函数表达式或箭头函数表达式的返回值类型
-  // 死循环
+  // never类型: 总是会抛出异常或不会有返回值的函数表达式或箭头函数表达式的返回值类型
   // 不能赋值给除了 never 类型的其他类型, 不能接受其他类型
   const err = (msg: string): never => {
     throw new Error(msg)
@@ -171,8 +174,27 @@ let addSum1: Func
 addSum1 = (a, b) => a + b
 ```
 - 类约束
+// 不同类之间公有的属性或方法，可以抽象成一个接口, 来被类实现（implements)
+// 类必须实现接口中声明的所有属性;可以定义接口未声明的属性
 // 接口只能约束类的公有成员 public
 // 接口不能约束类的构造函数
+interface Man {
+    name: string
+    age: number
+}
+
+class Huhua implements Man {
+    // 类中声明共有属性
+    name!: string // 赋值断言
+    age!: number
+    constructor(name: string, age: number) {
+        this.name = name
+        this.age = age
+    }
+    eat() {
+        console.log('eat food')
+    }
+}
 
 - 接口继承
 // 接口继承接口
@@ -298,7 +320,7 @@ dog1.move() // i can move
 - 类实现接口
 ```
 不同类之间可以有一些共有的特性，这时候就可以把特性提取成接口（interfaces），用 implements 关键字来实现
-// 类必须实现接口中声明的所有属性;可以定义接口未声明的属性
+// 类必须实现接口中声明的所有属性(相当于约束公有属性);可以定义接口未声明的属性
 // 接口只能约束类的公有成员 public
 // 接口不能约束类的构造函数
 interface Alarm {
@@ -322,7 +344,7 @@ class Car implements Alarm, Light {
     }
 }
 ```
-### 泛型
+### 泛型(相当于给类型传参)
 泛型：在定义函数、接口或类的时候，不预先指定具体的类型，而在使用的时候再指定类型的一种特性。
 在声明的同时指定类型变量的类型值
 ```
@@ -387,11 +409,14 @@ ggg([1, 2, 3])
 ## 理论进阶篇
 ### ts类型检查机制
 - 类型推断
-根据tsconfig.json的配置规则进行推断, 上下文推断,类型断言as
+根据tsconfig.json的配置规则进行推断, 上下文推断, 类型断言as, 双断言,  
+is关键字: xx is string, 赋值断言 let x!: string
+
 - 类型兼容
 不同变量相互赋值时的类型检查
 函数兼容: 参数个数, 参数类型, 返回值类型
 接口兼容: 成员少可以被赋值为成员多的
+
 - 类型保护
 在特殊区块使用确定的类型属性和方法
 ```
@@ -403,10 +428,36 @@ if (c in C) c.a
 函数的参数为联合类型
 if (typeof arg === 'string') {} else {}
 4.声明类型保护方法
+字面量
 ```
 ### 联合,交叉,索引类型
+- 交叉 & 合并类型属性
+- 联合 | 指定类型的所有可能性
+- 索引
+```
+// 缩小类型的约束范围;
+// 索引类型查询操作符K keyof T: 联合类型的集合;
+// 索引类型访问操作符 T[K]; 
+// 泛型约束 T extends U
+interface IObj {
+  a: string
+  b: number
+}
+let key: keyof IObj
+let k: IObj['a']
 
-
+let iobj = {
+  a: 1,
+  b: 2,
+  c: 'ccc'
+}
+// 泛型索引约束
+function getObjValue<T, K extends keyof T>(obj: T, keys: K[]): T[K][] {
+  return keys.map(key => obj[key])
+}
+console.log(getObjValue(iobj, ['a', 'c']));
+// console.log(getObjValue(iobj, ['a', 'd'])); 保错
+```
 
 ## 工程实践篇
 这里是针对我们在正式开发中使用 ts 的一些技巧及规范说明
@@ -423,27 +474,63 @@ declare function 声明全局方法
 declare class 声明全局类
 declare enum 声明全局枚举类型
 declare namespace 声明（含有子属性的）全局对象
-interface 和 type 声明全局类型
+declare interface 和 type 声明全局类型
 export 导出变量
 export namespace 导出（含有子属性的）对象
 export default ES6 默认导出
-export = commonjs 导出模块
+export = commonjs 导出模块, import xx = require('xxx')
 export as namespace UMD 库声明全局变量
 declare global 扩展全局变量
 declare module 扩展模块
 ```
+### ts工具类(泛型)
+- Partial: 将属性全部变为可选.
+```
+type Partial<T> = { [P in keyof T]?: T[P] };
+type p = Partial<InterfaceXXX>
+```
+- Required: 将可选变为必选
+- Exclude: 从 T 中排除出可分配给 U的元素
+```
+type T = Exclude<1 | 2, 1 | 3> // -> 2
+```
+- Omit: Omit<T, K>的作用是忽略T中的某些属性.
+```
+type Foo = Omit<{name: string, age: number}, 'name'> // -> { age: number }
+```
+- Merge: Merge<O1, O2>的作用是将两个对象的属性合并:
+- Intersection<T, U>的作用是取T的属性,此属性同样也存在于U.
+- Overwrite<T, U> U的属性覆盖 T中相同的属性
+### 开发的一些技巧
+待更新...
 
-## 一些注意事项(踩坑)
-1. vue组件内的 script 不支持别名导入; 只能相对路径导入, 暂时没发现解决方法
+## vue 项目中使用的一些问题
+本人是在 vue 项目中首先使用的, 发现支持并不是很好...但是还是咬牙写完了一个项目, 后续打算在 react使用一下
+- 相关插件文档
+  vue-class-component: 
+      https://github.com/vuejs/vue-docs-zh-cn/tree/master/vue-class-component
 
-2. 类型断言: 用于绕过ts编译器的类型检查; 即手动指定一个值的类型
-	
+  vue-property-decorator:
+      https://github.com/kaorun343/vue-property-decorator
+
+  vuex-class: 
+      https://github.com/ktsn/vuex-class
+
+  vuex-module-decorators
+      https://github.com/championswimmer/vuex-module-decorators
+
+- 类型断言: 用于绕过ts编译器的类型检查; 即手动指定一个值的类型
+```	
     <类型>值 =>  <string> value
-	值 as 类型 => value as string
+	  值 as 类型 => value as string
     (this.$refs['multiTable'] as any).clearSelection()
     (this.$refs['downParams'] as Form).resetFields()
-    
-3. $refs 双重断言
+```   
+- $refs 双重断言
+```
 	((this.$refs.saveTagInput as Vue)['$refs'].input as HTMLInputElement).focus()
+```
+- 使用三方库时安装或者自己写声明文件
+  @types/xxx
 
-
+### 未完待续, 后续在更新...

@@ -27,8 +27,8 @@ let s: S = 'a'
 console.log(s);
 
 // 3.索引类型
-// 缩小类型的约束范围
-// 索引类型查询操作符 keyof T; 联合类型的集合
+// 缩小类型的约束范围;
+// 索引类型查询操作符 keyof T: 联合类型的集合;
 // 类型指定 T[K]; 
 // 泛型约束 T extends U
 interface IObj {

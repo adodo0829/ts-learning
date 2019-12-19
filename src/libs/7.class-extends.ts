@@ -29,8 +29,8 @@ interface Man {
 
 class Huhua implements Man {
     // 类中声明共有属性
-    name: string
-    age: number
+    name!: string // 赋值断言
+    age!: number
     constructor(name: string, age: number) {
         this.name = name
         this.age = age
